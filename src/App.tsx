@@ -1,30 +1,29 @@
-import { useState } from 'react'
-import viteLogo from '/vite.svg'
-import './index.css'
-import { Button } from './components/ui/button'
-function App() {
-  const [count, setCount] = useState(0)
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { AuthProvider } from '@/context/AuthContext'
+import { Toaster } from '@/components/ui/sonner'
+import Login from '@/pages/Login'
+import Dashboard from '@/pages/Dashboard'
+import DashboardLayout from '@/layouts/DashboardLayout'
 
+function App() {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-      </div>
-      <h1 className="text-3xl  underline text-red-500">Vite + React</h1>
-      <div className="card">
-        <Button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </Button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <BrowserRouter>
+      <AuthProvider>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+
+          <Route path="/" element={<DashboardLayout />}>
+            <Route index element={<Navigate to="/dashboard" replace />} />
+            <Route path="dashboard" element={<Dashboard />} />
+            {/* Add other protected routes here later */}
+          </Route>
+
+          {/* Catch all redirect */}
+          <Route path="*" element={<Navigate to="/login" replace />} />
+        </Routes>
+        <Toaster />
+      </AuthProvider>
+    </BrowserRouter>
   )
 }
 
