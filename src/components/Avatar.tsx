@@ -1,6 +1,6 @@
 import { useAuth } from "@/context/AuthContext"
 import * as Avatar from "@radix-ui/react-avatar"
-import { LogOut, User as UserIcon } from "lucide-react"
+import { LogOut } from "lucide-react"
 
 import {
     DropdownMenu,

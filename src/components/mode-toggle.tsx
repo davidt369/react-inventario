@@ -9,9 +9,7 @@ export function ModeToggle() {
         setTheme(theme === "dark" ? "light" : "dark")
     }
 
-    const handleSystemTheme = () => {
-        setTheme("system")
-    }
+  
 
     return (
         <div className="flex items-center gap-2">

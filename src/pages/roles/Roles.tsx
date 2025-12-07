@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { DataTable } from "@/components/ui/data-table"
 import api from "@/lib/api"
 import { toast } from "sonner"

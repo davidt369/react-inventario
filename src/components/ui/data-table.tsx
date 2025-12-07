@@ -15,7 +15,7 @@ import type {
     SortingState,
     VisibilityState,
 } from "@tanstack/react-table"
-import { Download, Settings2, Search } from "lucide-react"
+import { Download, Settings2 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import {

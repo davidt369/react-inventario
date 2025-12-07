@@ -2,16 +2,16 @@ import { StatCard } from "@/components/ui/stat-card"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { useDashboardStats, useProductStats, useMovementStats, useTrendStats } from "@/hooks/useStats"
-import { AlertCircle, Package, TrendingUp, ArrowDownToLine, ArrowUpFromLine, Lightbulb, Settings, FileText, CheckCircle } from "lucide-react"
+import { AlertCircle, Package, TrendingUp, Lightbulb,  CheckCircle } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 import { LineChart } from "@/components/charts/LineChart"
 
 export default function AdminDashboard() {
     const navigate = useNavigate()
-    const { stats, isLoading: statsLoading } = useDashboardStats()
-    const { stats: productStats, isLoading: productLoading } = useProductStats()
-    const { stats: movementStats, isLoading: movementLoading } = useMovementStats("mes")
-    const { trendData, isLoading: trendLoading } = useTrendStats()
+    const { stats,  } = useDashboardStats()
+    const { stats: productStats} = useProductStats()
+    const { stats: movementStats } = useMovementStats("mes")
+    const { trendData, } = useTrendStats()
 
     return (
         <div className="space-y-6 animate-in fade-in-50 duration-500">
