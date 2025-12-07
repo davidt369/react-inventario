@@ -1,92 +1,91 @@
 import {
     Home,
-    Inbox,
-    User2,
-    Users,
     Box,
     Layers,
-    MapPin,
+    Package,
     ArrowLeftRight,
-    LogOut,
+    Building,
+    MapPin,
+    Users,
     Shield,
-    Bell
+    User2,
+    Bell,
+    LogOut
 } from "lucide-react"
 
 import {
     Sidebar,
     SidebarContent,
-    SidebarGroup,
-    SidebarGroupContent,
-    SidebarGroupLabel,
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
     SidebarFooter,
+    SidebarHeader,
 } from "@/components/ui/sidebar"
 import { useAuth } from "@/context/AuthContext"
-import { useNavigate, useLocation } from "react-router-dom"
+import { useNavigate, useLocation, Link } from "react-router-dom"
+import { Separator } from "@/components/ui/separator"
 
-// Menu items.
-const items = [
+const menuItems = [
     {
-        title: "Dashboard",
+        title: "Panel",
         url: "/dashboard",
         icon: Home,
-        roles: ["admin", "user", "superadmin"],
-    },
-    {
-        title: "Usuarios",
-        url: "/usuarios",
-        icon: Users,
-        roles: ["admin", "superadmin"],
-    },
-    {
-        title: "Roles",
-        url: "/roles",
-        icon: Shield,
-        roles: ["superadmin"],
-    },
-    {
-        title: "Categorías",
-        url: "/categorias",
-        icon: Layers,
-        roles: ["admin", "user", "superadmin"],
+        roles: ["admin", "operador", "superadmin"]
     },
     {
         title: "Productos",
         url: "/productos",
-        icon: Box,
-        roles: ["admin", "user", "superadmin"],
-    },
-    {
-        title: "Almacenes",
-        url: "/almacenes",
-        icon: Inbox,
-        roles: ["admin", "superadmin"],
-    },
-    {
-        title: "Ubicaciones",
-        url: "/ubicaciones",
-        icon: MapPin,
-        roles: ["admin", "superadmin"],
+        icon: Package,
+        roles: ["admin", "operador", "superadmin"]
     },
     {
         title: "Movimientos",
         url: "/movimientos",
         icon: ArrowLeftRight,
-        roles: ["admin", "user", "superadmin"],
+        roles: ["admin", "operador", "superadmin"]
+    },
+    {
+        title: "Categorías",
+        url: "/categorias",
+        icon: Layers,
+        roles: ["admin", "superadmin"]
+    },
+    {
+        title: "Almacenes",
+        url: "/almacenes",
+        icon: Building,
+        roles: ["admin", "superadmin"]
+    },
+    {
+        title: "Ubicaciones",
+        url: "/ubicaciones",
+        icon: MapPin,
+        roles: ["admin", "superadmin"]
     },
     {
         title: "Alertas",
         url: "/alertas",
         icon: Bell,
-        roles: ["admin", "user", "superadmin"],
+        roles: ["admin", "superadmin"]
+    },
+    {
+        title: "Usuarios",
+        url: "/usuarios",
+        icon: Users,
+        roles: ["superadmin"]
+    },
+    {
+        title: "Roles",
+        url: "/roles",
+        icon: Shield,
+        roles: ["superadmin"]
     },
     {
         title: "Proveedores",
         url: "/proveedores",
         icon: User2,
-        roles: ["admin", "superadmin"],
+        roles: ["admin", "superadmin"]
     },
 ]
 
@@ -100,41 +99,65 @@ export function AppSidebar() {
         navigate("/login")
     }
 
-    const filteredItems = items.filter(item => {
-        if (!user) return false
-        // Basic role check - adjust logic if role names differ exactly
-        // Assuming user.rol is a string like "admin" or "user"
-        const userRole = user.rol.toLowerCase()
-        return item.roles.includes(userRole)
-    })
-
+    // Filtrar items según el rol del usuario
+    const filteredItems = menuItems.filter(item =>
+        item.roles.includes(user?.rol?.toLowerCase() || "")
+    )
 
     return (
         <Sidebar>
-            <SidebarContent>
-                <SidebarGroup>
-                    <SidebarGroupLabel>Inventario</SidebarGroupLabel>
-                    <SidebarGroupContent>
-                        <SidebarMenu>
-                            {filteredItems.map((item) => (
-                                <SidebarMenuItem key={item.title}>
-                                    <SidebarMenuButton asChild isActive={location.pathname === item.url}>
-                                        <a href={item.url}>
-                                            <item.icon />
-                                            <span>{item.title}</span>
-                                        </a>
-                                    </SidebarMenuButton>
-                                </SidebarMenuItem>
-                            ))}
-                        </SidebarMenu>
-                    </SidebarGroupContent>
-                </SidebarGroup>
+            <SidebarHeader className="p-6">
+                <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
+                        <Box className="h-5 w-5 text-primary-foreground" />
+                    </div>
+                    <div className="flex flex-col">
+                        <h1 className="font-semibold">Inventario</h1>
+                        <span className="text-xs text-muted-foreground">
+                            {user?.username} • {user?.rol?.toUpperCase()}
+                        </span>
+                    </div>
+                </div>
+            </SidebarHeader>
+
+            <Separator />
+
+            <SidebarContent className="px-2 py-4">
+                <SidebarMenu>
+                    {filteredItems.map((item) => {
+                        const isActive = location.pathname === item.url
+                        return (
+                            <SidebarMenuItem key={item.title}>
+                                <SidebarMenuButton
+                                    asChild
+                                    isActive={isActive}
+                                >
+                                    <Link
+                                        to={item.url}
+                                        className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-accent transition-colors"
+                                    >
+                                        <item.icon className="h-4 w-4" />
+                                        <span className="text-sm font-medium">
+                                            {item.title}
+                                        </span>
+                                    </Link>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                        )
+                    })}
+                </SidebarMenu>
             </SidebarContent>
-            <SidebarFooter>
+
+            <Separator />
+
+            <SidebarFooter className="p-4">
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <SidebarMenuButton onClick={handleLogout}>
-                            <LogOut />
+                        <SidebarMenuButton
+                            onClick={handleLogout}
+                            className="text-destructive hover:text-destructive hover:bg-destructive/10 w-full"
+                        >
+                            <LogOut className="h-4 w-4" />
                             <span>Cerrar Sesión</span>
                         </SidebarMenuButton>
                     </SidebarMenuItem>

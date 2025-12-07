@@ -1,40 +1,39 @@
 import { useAuth } from "@/context/AuthContext"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import OperadorDashboard from "./dashboards/OperadorDashboard"
+import AdminDashboard from "./dashboards/AdminDashboard"
+import SuperadminDashboard from "./dashboards/SuperadminDashboard"
+import { Loader2 } from "lucide-react"
 
 export default function Dashboard() {
-    const { user } = useAuth()
+    const { user, isLoading } = useAuth()
 
-    return (
-        <div className="space-y-4">
-            <h1 className="text-2xl font-bold">Dashboard</h1>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">
-                            Bienvenido
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold capitalize">{user?.username}</div>
-                        <p className="text-xs text-muted-foreground">
-                            {user?.rol}
-                        </p>
-                    </CardContent>
-                </Card>
+    if (isLoading) {
+        return (
+            <div className="flex items-center justify-center h-96">
+                <Loader2 className="h-8 w-8 animate-spin" />
             </div>
+        )
+    }
 
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-                <Card className="col-span-4">
-                    <CardHeader>
-                        <CardTitle>Resumen General</CardTitle>
-                    </CardHeader>
-                    <CardContent className="pl-2">
-                        <div className="p-4 text-center text-muted-foreground">
-                            Seleccione una opción del menú lateral para comenzar.
-                        </div>
-                    </CardContent>
-                </Card>
-            </div>
-        </div>
-    )
+    if (!user) {
+        return null
+    }
+
+    const userRole = user.rol.toLowerCase()
+
+    // Render dashboard based on user role
+    if (userRole === "operador") {
+        return <OperadorDashboard />
+    }
+
+    if (userRole === "admin") {
+        return <AdminDashboard />
+    }
+
+    if (userRole === "superadmin" || userRole === "superadmin") {
+        return <SuperadminDashboard />
+    }
+
+    // Default fallback
+    return <OperadorDashboard />
 }
